@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #map {
+        height: 400px;
+        width: 100%;
+       }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <!--imports googleapis to html javascript-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        window.initMap = function() {
+          var linkList, latList, longList, cityNamesList, exchangeRateList, gdpGrowthList, gdpGrowthList, gdpPerCapitaList, apartmentRentSmallList;
+          //gets JSON of all urban areas links
+           $.getJSON("http://api.teleport.org/api/urban_areas/", function(json) {
+               cityNamesList=[]
+               linkList = [];
+               latList = [];
+               longList = [];
+               var markerList=[]
+               //gets list of all the links
+               for (var i = 0; i < json['count']; i++) {
+                   linkList.push(json['_links']['ua:item'][i]['href']);
+               }
+               //gets list of city names, latitude and longitude
+               for (var j = 0; j < linkList.length; j++) {
+                   $.getJSON(linkList[j], function(json) {
+                       cityNamesList.push(json['full_name']);
+                       latList.push(json['bounding_box']['latlon']['north']);
+                       longList.push(json['bounding_box']['latlon']['east']);
+                       var infowindow = new google.maps.InfoWindow({
+                                content: json['full_name']
+                              });
+                       var newLatLong = {
+                               lat: json['bounding_box']['latlon']['north'],
+                               lng: json['bounding_box']['latlon']['east']
+                           };
+                           var marker = new google.maps.Marker({
+                               position: newLatLong,
+                               map: map
+                           });
+                           marker.addListener('click', function() {
+  infowindow.open(map, this);
+});
+                           markerList.push(marker);
+                   });
+               }
+               console.log(cityNamesList);
+               console.log(latList);
+               console.log(longList);
+               console.log(markerList);
+
+               var uluru = {
+                   lat: 0,
+                   lng: 0
+               };
+               var map = new google.maps.Map(document.getElementById('map'), {
+                   zoom: 4,
+                   center: uluru
+               });
+
+
+
+
+           });
+        }
+    });
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3mKlzdgbZFNvxCvcjO4nilUkpAtvIxfM&callback=initMap"></script>
+</body>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+
+    <script src="js/index.js"></script>
+
+</body>
+</html>
