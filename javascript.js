@@ -30,7 +30,7 @@ $(document).ready(function() {
     //gets a list of all of the urban area links
     function getLinkList() {
         var linkList = [];
-        $.getJSON("http://api.teleport.org/api/urban_areas/", function(json) {
+        $.getJSON("https://api.teleport.org/api/urban_areas/", function(json) {
             for (var i = 0; i < json['count']; i++) {
                 linkList.push(json['_links']['ua:item'][i]['href']);
             }
