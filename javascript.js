@@ -167,10 +167,10 @@ function valueAdd(array){
     //This is clearly taking a lot of time to keep calling each function over and over again
     //what works: initMap needs to take request parameter. sure.
     window.initMap = function(request) {
-      var latCoordList = getCityInfo(getLinkList(), 'latCoord')
-      var longCoordList = getCityInfo(getLinkList(), 'longCoord')
-      var cityNamesList = getCityInfo(getLinkList(), 'cityName')
-      var cityDetailsList = getCityDetails(getLinkList(), request)
+      var latCoordList = getCityInfo(getLinkList(), 'latCoord');
+      var longCoordList = getCityInfo(getLinkList(), 'longCoord');
+      var cityNamesList = getCityInfo(getLinkList(), 'cityName');
+      var cityDetailsList = getCityDetails(getLinkList(), request);
         var uluru = {
             lat: 0,
             lng: 0
@@ -188,7 +188,7 @@ function valueAdd(array){
         marker.addListener('click', function() {
             infowindow.open(map, this);
         });
-        }
+      }
         for (var j = 0; j < cityDetailsList.length; j++) {
           //sets position
           var newPosition = {
@@ -230,5 +230,4 @@ function valueAdd(array){
         }
     }
     initMap('exchangeRate');
-    console.log(getCityDetails(getLinkList(), 'unemploymentRate'));
 });
