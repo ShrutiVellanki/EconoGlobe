@@ -204,7 +204,7 @@ function valueAdd(array){
               var image = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
             }
             else{
-              var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
+              var image = 'https://maps.google.com/mapfiles/ms/micons/green-dot.png';
 
             }
           }
