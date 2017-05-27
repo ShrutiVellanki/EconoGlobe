@@ -201,7 +201,7 @@ function valueAdd(array){
 
           if (cityDetailsList[j][1]<firstThird){
             if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
-              var image = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
+              var image = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
             }
             else{
               var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
@@ -209,14 +209,14 @@ function valueAdd(array){
             }
           }
           else if (cityDetailsList[j][1]>firstThird && cityDetailsList[j][1]<secondThird){
-            var image = 'http://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
+            var image = 'https://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
           }
           else{
             if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
-              var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
+              var image = 'https://maps.google.com/mapfiles/ms/micons/green-dot.png';
             }
             else{
-              var image = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
+              var image = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
             }
           }
 
