@@ -163,57 +163,14 @@ function valueAdd(array){
   return [sortedList[88], sortedList[177]];
 }
 
-    function setInfoWindow(index, map, request) {
-        var latCoordList = getCityInfo(getLinkList(), 'latCoord')
-        var longCoordList = getCityInfo(getLinkList(), 'longCoord')
-        var cityNamesList = getCityInfo(getLinkList(), 'cityName')
-        var cityDetailsList = getCityDetails(getLinkList(), request)
-        //sets position
-        var newPosition = {
-            lat: latCoordList[index],
-            lng: longCoordList[index]
-        };
-        //sets marker image (make if statements)
-        var firstThird = valueAdd(cityDetailsList)[0];
-        var secondThird = valueAdd(cityDetailsList)[1];
-
-        if (cityDetailsList[index][1]<firstThird){
-          if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
-            var image = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
-          }
-          else{
-            var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
-
-          }
-        }
-        else if (cityDetailsList[index][1]>firstThird && cityDetailsList[index][1]<secondThird){
-          var image = 'http://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
-        }
-        else{
-          if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
-            var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
-          }
-          else{
-            var image = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
-          }
-        }
-
-        //creates new google maps marker
-        var marker = new google.maps.Marker({
-            position: newPosition,
-            map: map,
-            icon: image
-        });
-
-        //sets content of info window
-        var infowindow = new google.maps.InfoWindow({
-            content: '<b>' + cityNamesList[index] + '</b><br>' + cityDetailsList[index][0]
-        })
-        marker.addListener('click', function() {
-            infowindow.open(map, this);
-        });
-    }
+    //okay so the strategy used here is that the initMap function is called, a map is set and the info window function is called to set each marker one at a time.
+    //This is clearly taking a lot of time to keep calling each function over and over again
+    //what works: initMap needs to take request parameter. sure.
     window.initMap = function(request) {
+      var latCoordList = getCityInfo(getLinkList(), 'latCoord')
+      var longCoordList = getCityInfo(getLinkList(), 'longCoord')
+      var cityNamesList = getCityInfo(getLinkList(), 'cityName')
+      var cityDetailsList = getCityDetails(getLinkList(), request)
         var uluru = {
             lat: 0,
             lng: 0
@@ -222,8 +179,54 @@ function valueAdd(array){
             zoom: 2,
             center: uluru
         });
-        for (var j = 0; j < 5; j++) {
-            setInfoWindow(j, map, request);
+
+        function setInfoWindow(j, marker){
+        //sets content of info window
+        var infowindow = new google.maps.InfoWindow({
+            content: '<b>' + cityNamesList[j] + '</b><br>' + cityDetailsList[j][0]
+        })
+        marker.addListener('click', function() {
+            infowindow.open(map, this);
+        });
+        }
+        for (var j = 0; j < cityDetailsList.length; j++) {
+          //sets position
+          var newPosition = {
+              lat: latCoordList[j],
+              lng: longCoordList[j]
+          };
+          //sets marker image (make if statements)
+          var firstThird = valueAdd(cityDetailsList)[0];
+          var secondThird = valueAdd(cityDetailsList)[1];
+
+          if (cityDetailsList[j][1]<firstThird){
+            if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
+              var image = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
+            }
+            else{
+              var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
+
+            }
+          }
+          else if (cityDetailsList[j][1]>firstThird && cityDetailsList[j][1]<secondThird){
+            var image = 'http://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
+          }
+          else{
+            if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
+              var image = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
+            }
+            else{
+              var image = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
+            }
+          }
+
+          //creates new google maps marker
+          var marker = new google.maps.Marker({
+              position: newPosition,
+              map: map,
+              icon: image
+          });
+          setInfoWindow(j, marker);
         }
     }
     initMap('exchangeRate');
