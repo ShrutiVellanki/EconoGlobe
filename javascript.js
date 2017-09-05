@@ -203,6 +203,9 @@ function valueAdd(array){
             if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
               var image = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
             }
+            else if (request == 'exchangeRate'){
+              var image = 'https://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
+            }
             else{
               var image = 'https://maps.google.com/mapfiles/ms/micons/green-dot.png';
 
@@ -214,6 +217,9 @@ function valueAdd(array){
           else{
             if (request == 'gdpPerCapita' || request == 'gdpGrowthRate'){
               var image = 'https://maps.google.com/mapfiles/ms/micons/green-dot.png';
+            }
+            else if (request = 'exchangeRate'){
+              var image = 'https://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
             }
             else{
               var image = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
