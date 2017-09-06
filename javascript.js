@@ -5,8 +5,9 @@ $(document).ready(function() {
     //when different things are selected, the description of pins change, map is initiated again
     document.getElementById("sell").addEventListener("change", function() {
         if (document.getElementById("sell").value == "Exchange Rate (per $1 US)") {
-            document.getElementById("red-pin").innerHTML = "High";
-            document.getElementById("green-pin").innerHTML = "Low";
+            document.getElementById("red-pin").style.visibility = "hidden";
+            document.getElementById("yellow-pin").style.visibility = "hidden";
+            document.getElementById("green-pin").style.visiblity = "hidden";
             initMap('exchangeRate');
         } else if (document.getElementById("sell").value == "GDP Growth Rate") {
             document.getElementById("red-pin").innerHTML = "Low";
@@ -235,5 +236,5 @@ function valueAdd(array){
           setInfoWindow(j, marker);
         }
     }
-    initMap('exchangeRate');
+    initMap('gdpGrowthRate');
 });
