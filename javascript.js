@@ -59,20 +59,20 @@ $(document).ready(function() {
     @param {JSON} json - the json object for the specific urban area
     @return {String} pushObject - the string to be displayed on the city's info window
     **/
-    function getExchangeDetails(json){
-      var jsonObject, jsonObject2;
-      var pushObject;
+    function getExchangeDetails(json) {
+        var jsonObject, jsonObject2;
+        var pushObject;
 
-      //Stores currency amount and currency name respectively
-      jsonObject = json['categories'][5]['data'][1]['float_value'];
-      jsonObject2 = json['categories'][5]['data'][0]['string_value'];
+        //Stores currency amount and currency name respectively
+        jsonObject = json['categories'][5]['data'][1]['float_value'];
+        jsonObject2 = json['categories'][5]['data'][0]['string_value'];
 
-      if (jsonObject == undefined || jsonObject2 == undefined) {
-          pushObject = 'info unavailible';
-      } else {
-          pushObject = ((jsonObject).toFixed(2)).toString() + " " + jsonObject2;
-      }
-      return pushObject;
+        if (jsonObject == undefined || jsonObject2 == undefined) {
+            pushObject = 'info unavailible';
+        } else {
+            pushObject = ((jsonObject).toFixed(2)).toString() + " " + jsonObject2;
+        }
+        return pushObject;
     }
 
     /**
@@ -80,14 +80,14 @@ $(document).ready(function() {
     @param {JSON} json - the json object for the specific urban area
     @return {String} pushObject - the string to be displayed on the city's info window
     **/
-    function getGrowthRate(json){
+    function getGrowthRate(json) {
         var jsonObject;
         var pushObject;
         jsonObject = json['categories'][5]['data'][2]['percent_value'];
         if (jsonObject == undefined) {
             pushObject = 'info unavailible';
         } else {
-          pushObject = (((jsonObject) * 100).toFixed(2)).toString() + "%";
+            pushObject = (((jsonObject) * 100).toFixed(2)).toString() + "%";
         }
         return pushObject;
     }
@@ -97,15 +97,15 @@ $(document).ready(function() {
     @param {JSON} json - the json object for the specific urban area
     @return {String} pushObject - the string to be displayed on the city's info window
     **/
-    function getPerCapita(json){
-      var jsonObject;
-      var pushObject;
-      jsonObject = json['categories'][5]['data'][4]['currency_dollar_value'];
-      if (jsonObject == undefined) {
-          pushObject = 'info unavailible';
-      } else {
-          pushObject = "$" + ((jsonObject).toFixed(2)).toString();
-      }
+    function getPerCapita(json) {
+        var jsonObject;
+        var pushObject;
+        jsonObject = json['categories'][5]['data'][4]['currency_dollar_value'];
+        if (jsonObject == undefined) {
+            pushObject = 'info unavailible';
+        } else {
+            pushObject = "$" + ((jsonObject).toFixed(2)).toString();
+        }
         return pushObject;
     }
 
@@ -114,7 +114,7 @@ $(document).ready(function() {
     @param {JSON} json - the json object for the specific urban area
     @return {String} pushObject - the string to be displayed on the city's info window
     **/
-    function getApartmentRent(json){
+    function getApartmentRent(json) {
         var jsonObject, jsonObject1, jsonObject2;
         var pushObject;
 
@@ -123,13 +123,13 @@ $(document).ready(function() {
         jsonObject1 = json['categories'][8]['data'][1]['currency_dollar_value'];
         jsonObject2 = json['categories'][8]['data'][0]['currency_dollar_value'];
 
-         if (jsonObject == undefined || jsonObject1 == undefined || jsonObject2 == undefined) {
-             pushObject = 'info unavailible';
-         } else {
-             pushObject = "Small: $" + ((jsonObject).toFixed(2)).toString();
-             pushObject += "<br>Medium: $" + ((jsonObject1).toFixed(2)).toString();
-             pushObject += "<br>Large: $" + ((jsonObject2).toFixed(2)).toString();
-         }
+        if (jsonObject == undefined || jsonObject1 == undefined || jsonObject2 == undefined) {
+            pushObject = 'info unavailible';
+        } else {
+            pushObject = "Small: $" + ((jsonObject).toFixed(2)).toString();
+            pushObject += "<br>Medium: $" + ((jsonObject1).toFixed(2)).toString();
+            pushObject += "<br>Large: $" + ((jsonObject2).toFixed(2)).toString();
+        }
         return pushObject;
     }
 
@@ -138,47 +138,47 @@ $(document).ready(function() {
     @param {JSON} json - the json object for the specific urban area
     @return {String} pushObject - the string to be displayed on the city's info window
     **/
-    function getUnemployment(json){
-      jsonObject = json['categories'][9]['data'][3]['percent_value'];
-      if (jsonObject == undefined) {
-          pushObject = 'info unavailible';
-      } else {
-          //converts object to a percent value
-          jsonObject = jsonObject * 10000;
-          pushObject = ((jsonObject).toFixed(2)).toString() + "%";
-      }
-      return pushObject;
+    function getUnemployment(json) {
+        jsonObject = json['categories'][9]['data'][3]['percent_value'];
+        if (jsonObject == undefined) {
+            pushObject = 'info unavailible';
+        } else {
+            //converts object to a percent value
+            jsonObject = jsonObject * 10000;
+            pushObject = ((jsonObject).toFixed(2)).toString() + "%";
+        }
+        return pushObject;
     }
 
 
-/**
-Returns dictionary storing city information
-@param {Array} array - the array of all city JSON object URLs
-@return {Dictionar} cityInfo - the dictionary that stores information about cities
-**/
-function getCityInfo(array) {
+    /**
+    Returns dictionary storing city information
+    @param {Array} array - the array of all city JSON object URLs
+    @return {Dictionar} cityInfo - the dictionary that stores information about cities
+    **/
+    function getCityInfo(array) {
 
-    var cityInfo = {};
-    for (var i = 0; i < array.length; i++) {
-       var cityInfoList = [];
-        $.getJSON(array[i], function(json) {
-                cityInfoList.push(json['full_name']);//0
-                cityInfoList.push(json['bounding_box']['latlon']['north']);//1
-                cityInfoList.push(json['bounding_box']['latlon']['east']);//2
-        });
+        var cityInfo = {};
+        for (var i = 0; i < array.length; i++) {
+            var cityInfoList = [];
+            $.getJSON(array[i], function(json) {
+                cityInfoList.push(json['full_name']); //0
+                cityInfoList.push(json['bounding_box']['latlon']['north']); //1
+                cityInfoList.push(json['bounding_box']['latlon']['east']); //2
+            });
 
-        $.getJSON(array[i] + 'details/', function(json) {
-            cityInfoList.push(getExchangeDetails(json));//3
-            cityInfoList.push(getGrowthRate(json));//4
-            cityInfoList.push(getPerCapita(json))//5
-            cityInfoList.push(getApartmentRent(json))//6
-            cityInfoList.push(getUnemployment(json))//7
-        });
+            $.getJSON(array[i] + 'details/', function(json) {
+                cityInfoList.push(getExchangeDetails(json)); //3
+                cityInfoList.push(getGrowthRate(json)); //4
+                cityInfoList.push(getPerCapita(json)) //5
+                cityInfoList.push(getApartmentRent(json)) //6
+                cityInfoList.push(getUnemployment(json)) //7
+            });
 
-        cityInfo[i] = cityInfoList;
-      }
-      return cityInfo;
- }
+            cityInfo[i] = cityInfoList;
+        }
+        return cityInfo;
+    }
 
     /**
     Initializes map based on menu selection by user
@@ -186,55 +186,55 @@ function getCityInfo(array) {
     **/
     window.initMap = function(request) {
 
-      //initializes pins and dictionary
-      var redPin = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
-      var cityInfoDict = getCityInfo(getLinkList());
+        //initializes pins and dictionary
+        var redPin = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
+        var cityInfoDict = getCityInfo(getLinkList());
 
-      //sets and centers maps
-      var uluru = {
-          lat: 0,
-          lng: 0
-      };
-      var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
-          center: uluru
-      });
+        //sets and centers maps
+        var uluru = {
+            lat: 0,
+            lng: 0
+        };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 2,
+            center: uluru
+        });
 
-      /**
-      Sets up the info window for the corresponding marker
-      @param {number} key - reprents the key wanted from the dictionary
-      @param {number} request - represents the position wanted from the value array in the dictionary
-      **/
-      function setInfoWindow(key, marker){
+        /**
+        Sets up the info window for the corresponding marker
+        @param {number} key - reprents the key wanted from the dictionary
+        @param {number} request - represents the position wanted from the value array in the dictionary
+        **/
+        function setInfoWindow(key, marker) {
 
-          //sets content of info window according to city (key) and user selection (request)
-          var infowindow = new google.maps.InfoWindow({
-              content: '<b>' + cityInfoDict[key][0] + '</b><br>' + cityInfoDict[key][request]
-          });
-          //opens info window when this marker is clicked
-          marker.addListener('click', function() {
-              infowindow.open(map, this);
-          });
-      }
+            //sets content of info window according to city (key) and user selection (request)
+            var infowindow = new google.maps.InfoWindow({
+                content: '<b>' + cityInfoDict[key][0] + '</b><br>' + cityInfoDict[key][request]
+            });
+            //opens info window when this marker is clicked
+            marker.addListener('click', function() {
+                infowindow.open(map, this);
+            });
+        }
 
-      //creates a new marker for each urban area, with info window to match
-      for (var key in cityInfoDict) {
-          //sets position of marker
-          var newPosition = {
-              lat: cityInfoDict[key][1],
-              lng: cityInfoDict[key][2]
-          };
+        //creates a new marker for each urban area, with info window to match
+        for (var key in cityInfoDict) {
+            //sets position of marker
+            var newPosition = {
+                lat: cityInfoDict[key][1],
+                lng: cityInfoDict[key][2]
+            };
 
-          var image = redPin;
+            var image = redPin;
 
-          //creates new google maps marker
-          var marker = new google.maps.Marker({
-              position: newPosition,
-              map: map,
-              icon: image
-          });
-          //sets marker's info window
-          setInfoWindow(key, marker);
+            //creates new google maps marker
+            var marker = new google.maps.Marker({
+                position: newPosition,
+                map: map,
+                icon: image
+            });
+            //sets marker's info window
+            setInfoWindow(key, marker);
         }
     }
 
