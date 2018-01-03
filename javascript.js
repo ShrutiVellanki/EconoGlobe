@@ -1,61 +1,51 @@
 $(document).ready(function() {
 
     /**
-
+    This makes sure that the map is not initialized before data is retrieved
+    and stored successfully.
     **/
     jQuery.ajaxSetup({
         async: false
     });
 
     /**
-    If option picked from the dropdown menu, change the map and legend to match
+    If option picked from the dropdown menu, change the map to match
     @param {function} function - function that listens for user selection
     **/
     document.getElementById("sell").addEventListener("change", function() {
 
         //If Exchange Rate selected
         if (document.getElementById("sell").value == "Exchange Rate (per $1 US)") {
-            document.getElementById("red-pin").innerHTML = "Low";
-            document.getElementById("green-pin").innerHTML = "High";
             initMap(3);
         }
 
         //if GDP Growth Rate selected
         else if (document.getElementById("sell").value == "GDP Growth Rate") {
-            document.getElementById("red-pin").innerHTML = "Low";
-            document.getElementById("green-pin").innerHTML = "High";
             initMap(4);
         }
 
         //If GDP Per Capita selected
         else if (document.getElementById("sell").value == "GDP Per Capita (USD)") {
-            document.getElementById("red-pin").innerHTML = "Low";
-            document.getElementById("green-pin").innerHTML = "High";
             initMap(5);
         }
 
         //if Apartment Rent Prices selected
         else if (document.getElementById("sell").value == "Apartment Rent Prices (USD)") {
-            document.getElementById("red-pin").innerHTML = "High";
-            document.getElementById("green-pin").innerHTML = "Low";
             initMap(6);
         }
 
         //if Unemployment Rate selected
         else if (document.getElementById("sell").value == "Unemployment Rate") {
-            document.getElementById("red-pin").innerHTML = "High";
-            document.getElementById("green-pin").innerHTML = "Low";
             initMap(7);
         }
     });
 
     /**
-    Gets list of Urban Area links from API
-
+    Gets list of Urban Area links from Teleport API
+    To be used to store data in the dictionary
     **/
     function getLinkList() {
         var linkList = [];
-        //gets list of all Links
         $.getJSON("https://api.teleport.org/api/urban_areas/", function(json) {
             for (var i = 0; i < json['count']; i++) {
                 linkList.push(json['_links']['ua:item'][i]['href']);
@@ -64,12 +54,19 @@ $(document).ready(function() {
         return linkList;
     }
 
-    //gets json for exchange rate details
+    /**
+    Gets Exchange Rate details
+    @param {JSON} json - the json object for the specific urban area
+    @return {String} pushObject - the string to be displayed on the city's info window
+    **/
     function getExchangeDetails(json){
       var jsonObject, jsonObject2;
       var pushObject;
+
+      //Stores currency amount and currency name respectively
       jsonObject = json['categories'][5]['data'][1]['float_value'];
       jsonObject2 = json['categories'][5]['data'][0]['string_value'];
+
       if (jsonObject == undefined || jsonObject2 == undefined) {
           pushObject = 'info unavailible';
       } else {
@@ -78,20 +75,28 @@ $(document).ready(function() {
       return pushObject;
     }
 
-    //gets json for growth rate details
+    /**
+    Gets Growth Rate details
+    @param {JSON} json - the json object for the specific urban area
+    @return {String} pushObject - the string to be displayed on the city's info window
+    **/
     function getGrowthRate(json){
-      var jsonObject;
-      var pushObject;
-          jsonObject = json['categories'][5]['data'][2]['percent_value'];
-          if (jsonObject == undefined) {
-              pushObject = 'info unavailible';
-          } else {
-              pushObject = (((jsonObject) * 100).toFixed(2)).toString() + "%";
-          }
-          return pushObject;
+        var jsonObject;
+        var pushObject;
+        jsonObject = json['categories'][5]['data'][2]['percent_value'];
+        if (jsonObject == undefined) {
+            pushObject = 'info unavailible';
+        } else {
+          pushObject = (((jsonObject) * 100).toFixed(2)).toString() + "%";
+        }
+        return pushObject;
     }
 
-    //gets json for gdpPerCapita
+    /**
+    Gets GDP Per Capita details
+    @param {JSON} json - the json object for the specific urban area
+    @return {String} pushObject - the string to be displayed on the city's info window
+    **/
     function getPerCapita(json){
       var jsonObject;
       var pushObject;
@@ -104,13 +109,19 @@ $(document).ready(function() {
         return pushObject;
     }
 
-    //gets json for apartmentRent
+    /**
+    Gets Apartment Rent Price details
+    @param {JSON} json - the json object for the specific urban area
+    @return {String} pushObject - the string to be displayed on the city's info window
+    **/
     function getApartmentRent(json){
-      var jsonObject, jsonObject1, jsonObject2;
-      var pushObject;
-         jsonObject = json['categories'][8]['data'][2]['currency_dollar_value'];
-         jsonObject1 = json['categories'][8]['data'][1]['currency_dollar_value'];
-         jsonObject2 = json['categories'][8]['data'][0]['currency_dollar_value'];
+        var jsonObject, jsonObject1, jsonObject2;
+        var pushObject;
+
+        //Stores rent prices for small, medium and large apartments respectively
+        jsonObject = json['categories'][8]['data'][2]['currency_dollar_value'];
+        jsonObject1 = json['categories'][8]['data'][1]['currency_dollar_value'];
+        jsonObject2 = json['categories'][8]['data'][0]['currency_dollar_value'];
 
          if (jsonObject == undefined || jsonObject1 == undefined || jsonObject2 == undefined) {
              pushObject = 'info unavailible';
@@ -122,12 +133,17 @@ $(document).ready(function() {
         return pushObject;
     }
 
-    //gets json for unemploymentRate
+    /**
+    Gets Unemployment details
+    @param {JSON} json - the json object for the specific urban area
+    @return {String} pushObject - the string to be displayed on the city's info window
+    **/
     function getUnemployment(json){
       jsonObject = json['categories'][9]['data'][3]['percent_value'];
       if (jsonObject == undefined) {
           pushObject = 'info unavailible';
       } else {
+          //converts object to a percent value
           jsonObject = jsonObject * 10000;
           pushObject = ((jsonObject).toFixed(2)).toString() + "%";
       }
@@ -136,18 +152,15 @@ $(document).ready(function() {
 
 
 /**
-Returns a dictionary of information for cities
-For each city: (accessed through links) cityName is the
-
+Returns dictionary storing city information
+@param {Array} array - the array of all city JSON object URLs
+@return {Dictionar} cityInfo - the dictionary that stores information about cities
 **/
 function getCityInfo(array) {
 
     var cityInfo = {};
-
     for (var i = 0; i < array.length; i++) {
-
        var cityInfoList = [];
-
         $.getJSON(array[i], function(json) {
                 cityInfoList.push(json['full_name']);//0
                 cityInfoList.push(json['bounding_box']['latlon']['north']);//1
@@ -164,20 +177,17 @@ function getCityInfo(array) {
 
         cityInfo[i] = cityInfoList;
       }
-
       return cityInfo;
-}
+ }
 
-    //okay so the strategy used here is that the initMap function is called, a map is set and the info window function is called to set each marker one at a time.
-    //This is clearly taking a lot of time to keep calling each function over and over again
-    //what works: initMap needs to take request parameter. sure.
+    /**
+    Initializes map based on menu selection by user
+    @param {number} request - represents the position wanted from the value array in the dictionary
+    **/
     window.initMap = function(request) {
 
-      //different types of pins
+      //initializes pins and dictionary
       var redPin = 'https://maps.google.com/mapfiles/ms/micons/red-dot.png';
-      var yellowPin = 'https://maps.google.com/mapfiles/ms/micons/yellow-dot.png';
-      var greenPin = 'https://maps.google.com/mapfiles/ms/micons/green-dot.png';
-
       var cityInfoDict = getCityInfo(getLinkList());
 
       //sets and centers maps
@@ -190,24 +200,26 @@ function getCityInfo(array) {
           center: uluru
       });
 
-      //console.log(getLinkList());
-
+      /**
+      Sets up the info window for the corresponding marker
+      @param {number} key - reprents the key wanted from the dictionary
+      @param {number} request - represents the position wanted from the value array in the dictionary
+      **/
       function setInfoWindow(key, marker){
 
-          //sets content of info window
+          //sets content of info window according to city (key) and user selection (request)
           var infowindow = new google.maps.InfoWindow({
               content: '<b>' + cityInfoDict[key][0] + '</b><br>' + cityInfoDict[key][request]
           });
-
-      marker.addListener('click', function() {
-          infowindow.open(map, this);
-      });
-
+          //opens info window when this marker is clicked
+          marker.addListener('click', function() {
+              infowindow.open(map, this);
+          });
       }
 
-
+      //creates a new marker for each urban area, with info window to match
       for (var key in cityInfoDict) {
-          //sets position
+          //sets position of marker
           var newPosition = {
               lat: cityInfoDict[key][1],
               lng: cityInfoDict[key][2]
@@ -221,8 +233,11 @@ function getCityInfo(array) {
               map: map,
               icon: image
           });
+          //sets marker's info window
           setInfoWindow(key, marker);
         }
     }
+
+    //default initialization to Exchange Rate map display
     initMap(3);
 });
