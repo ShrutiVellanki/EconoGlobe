@@ -6,7 +6,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
       <meta charset="UTF-8">
-      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="index.css">
    </head>
 
    <body class = "container" style="text-align:center">
@@ -18,15 +18,15 @@
       </div>
       <div class="row">
          <h6 class="col-lg">
-            Hint: Click on pins for city-specifc data
+            Hover over pins for city-specifc data
          </h6>
       </div>
 
       <!--Dropdown menu-->
       <div class="form-group row">
          <div class ="col"></div>
-         <label for="sel1" class="col-lg">Sort cities by:</label>
-         <select class="form-control col-md" id="sell">
+         <label for="sel1" class="col-lg">Currently displaying:</label>
+         <select class="form-control col-md" id="selector">
             <option>Exchange Rate (per $1 US)</option>
             <option>GDP Growth Rate</option>
             <option>GDP Per Capita (USD)</option>
@@ -49,9 +49,8 @@
          </h6>
       </div>
       
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
       <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3mKlzdgbZFNvxCvcjO4nilUkpAtvIxfM"></script>
-      <script src="javascript.js"></script>
+      <script src="index.js"></script>
    </body>
 </html>
