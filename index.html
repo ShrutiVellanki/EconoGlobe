@@ -2,11 +2,8 @@
 <html>
 
    <head>
-      <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
       <meta charset="UTF-8">
-      <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="index.css">            
    </head>
 
    <body class = "container" style="text-align:center">
@@ -37,7 +34,9 @@
       </div>
 
       <!--Map-->
-      <div id="map"></div>
+      <div id="map-container">
+          <img src="https://loading.io/spinners/typing/lg.-text-entering-comment-loader.gif" alt="Loading...">
+      </div>
 
       <!--Link to my github-->
       <div class="row">
@@ -48,9 +47,11 @@
             </a>
          </h6>
       </div>
-      
+
+      <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-      <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3mKlzdgbZFNvxCvcjO4nilUkpAtvIxfM"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3mKlzdgbZFNvxCvcjO4nilUkpAtvIxfM"></script>
       <script src="index.js"></script>
    </body>
 </html>

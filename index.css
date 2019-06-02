@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+#map-container {
+    margin: 10%;
+}
+
 body {
     font-family: Orbitron;
 }
